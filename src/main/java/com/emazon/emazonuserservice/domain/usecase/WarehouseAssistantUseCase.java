@@ -22,7 +22,7 @@ public class WarehouseAssistantUseCase implements IUserServicePort {
 
         UserValidatorUtil.userFieldsValidated(user);
 
-        if (userPersistencePort.existByIdentityDocument(user.getIdentityDocument())) {
+        if (Boolean.TRUE.equals(userPersistencePort.existByIdentityDocument(user.getIdentityDocument()))) {
             throw new UserAlreadyExistException(
                     String.format(ValidationErrorConstants.USER_ALREADY_EXIST,
                             user.getIdentityDocument()));
@@ -30,7 +30,7 @@ public class WarehouseAssistantUseCase implements IUserServicePort {
 
 
 
-        if (!userPersistencePort.rolNameExist(RoleConstants.WAREHOUSE_ASSISTANT.name())) {
+        if (Boolean.FALSE.equals(userPersistencePort.rolNameExist(RoleConstants.WAREHOUSE_ASSISTANT.name()))) {
             throw new RoleNotFoundException(
                     String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
                             RoleConstants.WAREHOUSE_ASSISTANT.name())
@@ -39,6 +39,8 @@ public class WarehouseAssistantUseCase implements IUserServicePort {
         }
 
         userPersistencePort.saveUser(user);
+
+
 
     }
 }

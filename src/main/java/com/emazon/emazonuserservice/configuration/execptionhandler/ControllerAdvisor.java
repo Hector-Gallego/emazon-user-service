@@ -4,6 +4,7 @@ import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.exception.UserAlreadyExistException;
 import com.emazon.emazonuserservice.domain.exception.UserValidationException;
 import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -73,14 +74,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
+            @Nonnull HttpMessageNotReadableException ex,
             @Nullable HttpHeaders headers,
             @Nullable HttpStatusCode status,
             @Nullable WebRequest request) {
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
+                ValidationErrorConstants.INVALID_DATE_FORMAT,
                 Collections.emptyList(),
                 LocalDateTime.now()
 
@@ -90,7 +91,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
 
-    private ResponseEntity<ErrorResponse> buildErrorResponse(Exception exception, HttpStatus status, List<String> errors) {
+    private ResponseEntity<ErrorResponse> buildErrorResponse(Exception exception,  HttpStatus status, List<String> errors) {
         ErrorResponse errorResponse = new ErrorResponse(
                 status.value(),
                 exception.getMessage(),

@@ -20,6 +20,14 @@ public final class OpenApiConstants {
     public static final String USER_CREATED = "User created successfully";
     public static final String INVALID_INPUT = "Invalid input";
 
+    public static final String NAME_EXAMPLE = "Juan";
+    public static final String LAST_NAME_EXAMPLE = "Gonzales";
+    public static final String DATE_EXAMPLE = "01/01/2000";
+    public static final String IDENTITY_DOCUMENT_EXAMPLE = "1001654123";
+    public static final String PASSWORD_EXAMPLE = "Password123";
+    public static final String PHONE_NUMBER_EXAMPLE = "+57567234";
+    public static final String EMAIL_EXAMPLE = "juan@gmail.com";
+
 
 
 
