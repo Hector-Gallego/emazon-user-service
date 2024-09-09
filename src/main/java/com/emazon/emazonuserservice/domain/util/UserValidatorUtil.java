@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 public final class UserValidatorUtil {
 
-
     private UserValidatorUtil() {
         throw new IllegalStateException();
     }
@@ -29,7 +28,7 @@ public final class UserValidatorUtil {
 
         if (Boolean.FALSE.equals(errors.isEmpty())) {
             throw new UserValidationException(
-                    ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS.getMessage(),
+                    ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS,
                     errors);
         }
     }
@@ -37,42 +36,43 @@ public final class UserValidatorUtil {
     private static void validatePassword(String password, List<String> errors) {
 
 
-        if ( password == null || password.isBlank()) {
-            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD.getMessage());
-        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.PASSWORD_REGEX.getRegex(), password))) {
-            errors.add(ValidationErrorConstants.INVALID_PASSWORD.getMessage());
+        if (password == null || password.isBlank()) {
+            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD);
+        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.PASSWORD_REGEX, password))) {
+            errors.add(ValidationErrorConstants.INVALID_PASSWORD);
         }
 
     }
+
     private static void validateEmail(String email, List<String> errors) {
 
 
         if (email.isBlank()) {
-            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD.getMessage());
-        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.EMAIL_REGEX.getRegex(), email))) {
-            errors.add(ValidationErrorConstants.INVALID_EMAIL.getMessage());
+            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD);
+        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.EMAIL_REGEX, email))) {
+            errors.add(ValidationErrorConstants.INVALID_EMAIL);
         }
     }
 
     private static void validatePhoneNumber(String phoneNumber, List<String> errors) {
 
         if (phoneNumber == null || phoneNumber.isBlank()) {
-            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD.getMessage());
-        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.PHONE_NUMBER_REGEX.getRegex(), phoneNumber))) {
-            errors.add(ValidationErrorConstants.INVALID_PHONE_NUMBER.getMessage());
+            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD);
+        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.PHONE_NUMBER_REGEX, phoneNumber))) {
+            errors.add(ValidationErrorConstants.INVALID_PHONE_NUMBER);
         }
     }
 
     private static void validateAge(LocalDate birthDate, List<String> errors) {
 
         if (birthDate == null) {
-            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD.getMessage());
+            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD);
         } else {
 
             LocalDate today = LocalDate.now();
             Period age = Period.between(birthDate, today);
             if (age.getYears() < 18) {
-                errors.add(ValidationErrorConstants.INVALID_AGE.getMessage());
+                errors.add(ValidationErrorConstants.INVALID_AGE);
             }
         }
 
@@ -81,15 +81,16 @@ public final class UserValidatorUtil {
     private static void validateIdentityDocument(String identityDocument, List<String> errors) {
 
         if (identityDocument == null || identityDocument.isBlank()) {
-            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD.getMessage());
-        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.IDENTITY_DOCUMENT_REGEX.getRegex(), identityDocument))) {
-            errors.add(ValidationErrorConstants.INVALID_IDENTITY_DOCUMENT.getMessage());
+            errors.add(ValidationErrorConstants.NULL_OR_EMPTY_FIELD);
+        } else if (Boolean.FALSE.equals(isValidField(RegexConstants.IDENTITY_DOCUMENT_REGEX, identityDocument))) {
+            errors.add(ValidationErrorConstants.INVALID_IDENTITY_DOCUMENT);
         }
 
 
     }
 
-    public static Boolean isValidField(String regex, String field){
+
+    public static Boolean isValidField(String regex, String field) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(field);
         return matcher.matches();
