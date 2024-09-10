@@ -40,7 +40,9 @@ public class UserJpaAdapter implements IUserPersistencePort {
 
         UserEntity assistantEntity = userToUserEntityMapper.userToUserEntity(user);
 
+        //mover al caso de uso - crear un metodo en el puerto
         assistantEntity.setPassword(passwordEncoder.encode(assistantEntity.getPassword()));
+
         assistantEntity.setRole(roleEntity);
         warehouseAssistantRepository.save(assistantEntity);
     }

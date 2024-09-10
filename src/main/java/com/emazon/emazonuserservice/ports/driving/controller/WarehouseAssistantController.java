@@ -51,6 +51,7 @@ public class WarehouseAssistantController {
     })
     @PostMapping
     public ResponseEntity<CustomApiResponse<Void>> saveWarehouseAssistant(@RequestBody UserRequestDto userRequestDto){
+
         userServicePort.saveWareHouseAssistant(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
 
 

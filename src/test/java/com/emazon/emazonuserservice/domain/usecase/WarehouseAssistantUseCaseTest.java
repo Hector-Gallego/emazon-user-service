@@ -53,6 +53,7 @@ class WarehouseAssistantUseCaseTest {
         UserValidationException exception = assertThrows(UserValidationException.class,
                 () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
 
+        //verificar que la funcione de guardar nunca se llama verify never
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS,
                 exception.getMessage());
