@@ -81,7 +81,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                ValidationErrorConstants.INVALID_DATE_FORMAT,
+                ValidationErrorConstants.INVALID_DATA_FORMAT,
                 Collections.emptyList(),
                 LocalDateTime.now()
 

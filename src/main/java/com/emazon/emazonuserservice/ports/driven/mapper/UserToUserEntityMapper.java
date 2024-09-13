@@ -13,5 +13,6 @@ import org.mapstruct.ReportingPolicy;
 public interface UserToUserEntityMapper {
 
     UserEntity userToUserEntity(User user);
+    User userEntityToUser(UserEntity userEntity);
 
 }

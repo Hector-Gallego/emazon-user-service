@@ -1,11 +1,11 @@
 package com.emazon.emazonuserservice.ports.driving.controller;
 
+
 import com.emazon.emazonuserservice.configuration.execptionhandler.ErrorResponse;
-import com.emazon.emazonuserservice.domain.api.UserServicePort;
+import com.emazon.emazonuserservice.domain.sec.UserAuthenticationPort;
 import com.emazon.emazonuserservice.domain.util.UserConstants;
 import com.emazon.emazonuserservice.ports.driving.dto.CustomApiResponse;
-import com.emazon.emazonuserservice.ports.driving.dto.UserRequestDto;
-import com.emazon.emazonuserservice.ports.driving.mapper.UserToUserDtoMapper;
+import com.emazon.emazonuserservice.ports.driving.dto.UserCredentialsDto;
 import com.emazon.emazonuserservice.ports.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,32 +14,29 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-
-
 @RestController
-@RequestMapping("/api/user/warehouseAssistant")
-public class WarehouseAssistantController {
+@RequestMapping("/api/user/login")
+public class UserAuthenticationController {
 
-    private final UserServicePort userServicePort;
-    private final UserToUserDtoMapper userToUserDtoMapper;
 
-    public WarehouseAssistantController(UserServicePort userServicePort, UserToUserDtoMapper userToUserDtoMapper) {
-        this.userServicePort = userServicePort;
-        this.userToUserDtoMapper = userToUserDtoMapper;
+    private final UserAuthenticationPort authenticationUserPort;
+
+    public UserAuthenticationController(UserAuthenticationPort authenticationUserPort) {
+        this.authenticationUserPort = authenticationUserPort;
     }
 
 
-
-    @Operation(summary = OpenApiConstants.OPENAPI_CREATE_USER_SUMMARY,
-            description = OpenApiConstants.OPENAPI_CREATE_USER_DESCRIPTION)
+    @Operation(summary = OpenApiConstants.OPENAPI_AUTHENTICATION_USER_SUMMARY,
+            description = OpenApiConstants.OPENAPI_AUTHENTICATION_USER_DESCRIPTION)
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = OpenApiConstants.OPENAPI_CODE_200,
-                    description = OpenApiConstants.USER_CREATED,
+                    description = OpenApiConstants.USER_AUTHENTICATED_SUCCESSFULLY,
                     content = @Content(mediaType = OpenApiConstants.OPENAPI_MEDIA_TYPE_JSON,
                             schema = @Schema(implementation = CustomApiResponse.class))),
             @ApiResponse(responseCode = OpenApiConstants.OPENAPI_CODE_400,
@@ -52,19 +49,25 @@ public class WarehouseAssistantController {
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping
-    public ResponseEntity<CustomApiResponse<Void>> saveWarehouseAssistant(@RequestBody UserRequestDto userRequestDto){
-
-        userServicePort.saveWareHouseAssistant(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
+    public ResponseEntity<CustomApiResponse<String>> loginUser(@Validated @RequestBody UserCredentialsDto userCredentialsDto) {
 
 
-        CustomApiResponse<Void> response = new CustomApiResponse<>(
+        String username = userCredentialsDto.getUsername();
+        String password = userCredentialsDto.getPassword();
+
+
+        authenticationUserPort.validateUsernameAndPassword(username, password);
+        String accessToken = authenticationUserPort.getAuthenticatedUserAccessJwtToken(username, password);
+
+        CustomApiResponse<String> response = new CustomApiResponse<>(
                 HttpStatus.OK.value(),
-                UserConstants.USER_CREATED_SUCCESSFULLY,
-                null,
+                UserConstants.USER_AUTHENTICATION_SUCCESSFULLY,
+                accessToken,
                 LocalDateTime.now());
-
         return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
-
 }
+
+

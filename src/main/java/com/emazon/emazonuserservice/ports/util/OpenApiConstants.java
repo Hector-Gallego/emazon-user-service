@@ -1,10 +1,10 @@
 package com.emazon.emazonuserservice.ports.util;
 
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
 public final class OpenApiConstants {
 
+    private OpenApiConstants(){
+        throw new IllegalStateException();
+    }
 
     public static final String OPENAPI_CODE_400 = "400";
     public static final String OPENAPI_CODE_500 = "500";
@@ -29,9 +29,9 @@ public final class OpenApiConstants {
     public static final String EMAIL_EXAMPLE = "juan@gmail.com";
 
 
-
-
-
+    public static final String OPENAPI_AUTHENTICATION_USER_SUMMARY = "Authenticate a user to access the system.";
+    public static final String OPENAPI_AUTHENTICATION_USER_DESCRIPTION = "Endpoint for user authentication. This endpoint allows users to authenticate themselves by providing valid credentials, which are then validated to grant access to the system.";
+    public static final String USER_AUTHENTICATED_SUCCESSFULLY = "User has been successfully authenticated.";
 
 
 }

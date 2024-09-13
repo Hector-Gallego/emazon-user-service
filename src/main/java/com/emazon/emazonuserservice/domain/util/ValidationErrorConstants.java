@@ -7,7 +7,7 @@ public final class ValidationErrorConstants {
         throw new IllegalStateException();
     }
 
-    public static final String INVALID_DATE_FORMAT = "Invalid date format, use: dd/MM/yyyy";
+    public static final String INVALID_DATA_FORMAT = "Invalid data format detected. Ensure that all fields are correctly formatted according to the specified requirements.";
     public static final String INVALID_ONE_OR_MORE_FIELDS = "One or more fields are invalid.";
     public static final String INVALID_EMAIL = "Invalid email format.";
     public static final String INVALID_PHONE_NUMBER = "Invalid phone number format.";
