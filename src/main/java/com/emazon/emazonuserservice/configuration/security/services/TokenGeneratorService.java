@@ -43,20 +43,18 @@ public class TokenGeneratorService {
         Map<String, Object> claimsMap = new HashMap<>();
         claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_USERID, userDetails.getId());
         claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_NAME, userDetails.getName());
+        claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_ROLES, roles);
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet
                 .builder()
                 .subject(authentication.getName())
                 .issuer(SecurityConstants.URL_APP)
-                .expiresAt(now.plus(timeExpiration, ChronoUnit.HOURS))
+                .expiresAt(now.plus(timeExpiration, ChronoUnit.MINUTES))
                 .claims(claims -> claims.putAll(claimsMap))
-                .claim(SecurityConstants.CLAIM_NAME_FIELD_ROLES, roles)
                 .build();
 
         return this.tokenEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
 
     }
-
-
 
 }

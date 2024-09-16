@@ -1,8 +1,8 @@
-package com.emazon.emazonuserservice.ports.driving.controller;
+package com.emazon.emazonuserservice.configuration.security.controller;
 
 
 import com.emazon.emazonuserservice.configuration.execptionhandler.ErrorResponse;
-import com.emazon.emazonuserservice.domain.sec.UserAuthenticationPort;
+import com.emazon.emazonuserservice.configuration.security.services.AuthenticationService;
 import com.emazon.emazonuserservice.domain.util.UserConstants;
 import com.emazon.emazonuserservice.ports.driving.dto.CustomApiResponse;
 import com.emazon.emazonuserservice.ports.driving.dto.UserCredentialsDto;
@@ -21,13 +21,13 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/user/login")
-public class UserAuthenticationController {
+public class AuthenticationController {
 
 
-    private final UserAuthenticationPort authenticationUserPort;
+    private final AuthenticationService authenticationService;
 
-    public UserAuthenticationController(UserAuthenticationPort authenticationUserPort) {
-        this.authenticationUserPort = authenticationUserPort;
+    public AuthenticationController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
 
@@ -52,12 +52,10 @@ public class UserAuthenticationController {
     public ResponseEntity<CustomApiResponse<String>> loginUser(@Validated @RequestBody UserCredentialsDto userCredentialsDto) {
 
 
-        String username = userCredentialsDto.getUsername();
-        String password = userCredentialsDto.getPassword();
+        String accessToken = authenticationService
+                .authenticatedAndGenerateJwtToken(userCredentialsDto.getUsername(),
+                        userCredentialsDto.getPassword());
 
-
-        authenticationUserPort.validateUsernameAndPassword(username, password);
-        String accessToken = authenticationUserPort.getAuthenticatedUserAccessJwtToken(username, password);
 
         CustomApiResponse<String> response = new CustomApiResponse<>(
                 HttpStatus.OK.value(),

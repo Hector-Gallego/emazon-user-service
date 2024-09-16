@@ -11,12 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -25,6 +29,7 @@ import java.util.List;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+
 
     @ExceptionHandler(UserValidationException.class)
     public ResponseEntity<ErrorResponse> handleUserValidationException(UserValidationException exception) {
@@ -45,6 +50,22 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDateTimeParseException(DateTimeParseException exception){
         return  buildErrorResponse(exception, HttpStatus.BAD_REQUEST, Collections.emptyList());
     }
+
+    @ExceptionHandler(InvalidBearerTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidBearerTokenException(InvalidBearerTokenException exception) {
+        return buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception){
+        return  buildErrorResponse(exception, HttpStatus.FORBIDDEN, Collections.emptyList());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception){
+        return  buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

@@ -1,13 +1,9 @@
 package com.emazon.emazonuserservice.domain.usecase;
 
-import com.emazon.emazonuserservice.domain.exception.InvalidUserCredentialsException;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.sec.JwtTokenGenerationPort;
-import com.emazon.emazonuserservice.domain.spi.UserPersistencePort;
+import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
 import com.emazon.emazonuserservice.domain.util.UserConstants;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
 import com.emazon.emazonuserservice.factory.TestDataFactory;
-import jakarta.persistence.Id;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

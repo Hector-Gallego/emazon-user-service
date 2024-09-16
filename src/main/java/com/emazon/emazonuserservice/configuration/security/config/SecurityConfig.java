@@ -1,6 +1,8 @@
 package com.emazon.emazonuserservice.configuration.security.config;
 
 
+import com.emazon.emazonuserservice.configuration.execptionhandler.DelegateAccessDeniedHandler;
+import com.emazon.emazonuserservice.configuration.execptionhandler.DelegateAuthenticationEntryPoint;
 import com.emazon.emazonuserservice.configuration.security.util.ApiEndPointsConstants;
 import com.emazon.emazonuserservice.configuration.security.util.SecurityConstants;
 import com.emazon.emazonuserservice.configuration.security.services.CustomUserDetailsService;
@@ -28,21 +30,25 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
+
     private final RsaKeyProperties rsaKeys;
+    private final DelegateAuthenticationEntryPoint authEntryPoint;
+    private final DelegateAccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, RsaKeyProperties rsaKeys) {
-        this.customUserDetailsService = customUserDetailsService;
+    public SecurityConfig(RsaKeyProperties rsaKeys,
+                          DelegateAuthenticationEntryPoint authEntryPoint,
+                          DelegateAccessDeniedHandler accessDeniedHandler) {
         this.rsaKeys = rsaKeys;
+        this.authEntryPoint = authEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
 
@@ -58,22 +64,22 @@ public class SecurityConfig  {
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .userDetailsService(customUserDetailsService)
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> {
                             jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
                             jwt.decoder(jwtDecoder());
                         })
-                )
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+
+                );
+
 
         return http.build();
     }
 
     @Bean
-    public JwtAuthenticationConverter  jwtAuthenticationConverter(){
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(SecurityConstants.CLAIM_NAME_FIELD_ROLES);
@@ -87,7 +93,8 @@ public class SecurityConfig  {
     }
 
     @Bean
-    public AuthenticationManager authManager(CustomUserDetailsService customUserDetailsService){
+    public AuthenticationManager authManager(CustomUserDetailsService customUserDetailsService) {
+
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -96,20 +103,21 @@ public class SecurityConfig  {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
-    JwtEncoder jwtEncoder(){
-        JWK jwk = new RSAKey.Builder(rsaKeys.PublicKey()).privateKey(rsaKeys.privateKey()).build();
+    JwtEncoder jwtEncoder() {
+        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
 
     @Bean
-    JwtDecoder jwtDecoder(){
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.PublicKey()).build();
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
 

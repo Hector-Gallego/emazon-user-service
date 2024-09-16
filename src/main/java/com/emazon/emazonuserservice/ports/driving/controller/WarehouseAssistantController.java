@@ -1,7 +1,7 @@
 package com.emazon.emazonuserservice.ports.driving.controller;
 
 import com.emazon.emazonuserservice.configuration.execptionhandler.ErrorResponse;
-import com.emazon.emazonuserservice.domain.api.UserServicePort;
+import com.emazon.emazonuserservice.domain.ports.api.UserServicePort;
 import com.emazon.emazonuserservice.domain.util.UserConstants;
 import com.emazon.emazonuserservice.ports.driving.dto.CustomApiResponse;
 import com.emazon.emazonuserservice.ports.driving.dto.UserRequestDto;

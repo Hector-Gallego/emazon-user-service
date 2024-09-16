@@ -1,10 +1,8 @@
 package com.emazon.emazonuserservice.ports.driven.adapter;
 
-import com.emazon.emazonuserservice.domain.exception.InvalidUserCredentialsException;
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.sec.PasswordEncoderPort;
-import com.emazon.emazonuserservice.domain.spi.UserPersistencePort;
+import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
 import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
 import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
 import com.emazon.emazonuserservice.ports.driven.entity.RoleEntity;
@@ -20,13 +18,11 @@ public class UserJpaAdapter implements UserPersistencePort {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoderPort passwordEncoder;
     private final UserToUserEntityMapper userToUserEntityMapper;
 
-    public UserJpaAdapter(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoderPort passwordEncoder, UserToUserEntityMapper userToUserEntityMapper) {
+    public UserJpaAdapter(UserRepository userRepository, RoleRepository roleRepository, UserToUserEntityMapper userToUserEntityMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
         this.userToUserEntityMapper = userToUserEntityMapper;
     }
 
@@ -58,14 +54,7 @@ public class UserJpaAdapter implements UserPersistencePort {
         return roleRepository.findByName(role).isPresent();
     }
 
-    @Override
-    public Boolean validUserCredentials(String username, String password) {
 
-        UserEntity user = userRepository.findByEmail(username).orElseThrow(
-                InvalidUserCredentialsException::new);
-
-        return passwordEncoder.matchesPassword(password, user.getPassword());
-    }
 
     @Override
     public Optional<UserEntity> findByEmail(String email) {
