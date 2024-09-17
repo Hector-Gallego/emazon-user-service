@@ -2,10 +2,11 @@ package com.emazon.emazonuserservice.configuration.security.controller;
 
 
 import com.emazon.emazonuserservice.configuration.execptionhandler.ErrorResponse;
+import com.emazon.emazonuserservice.configuration.security.dto.ResponseDto;
 import com.emazon.emazonuserservice.configuration.security.services.AuthenticationService;
 import com.emazon.emazonuserservice.domain.util.UserConstants;
 import com.emazon.emazonuserservice.ports.driving.dto.CustomApiResponse;
-import com.emazon.emazonuserservice.ports.driving.dto.UserCredentialsDto;
+import com.emazon.emazonuserservice.configuration.security.dto.UserCredentialsDto;
 import com.emazon.emazonuserservice.ports.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,7 +50,7 @@ public class AuthenticationController {
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping
-    public ResponseEntity<CustomApiResponse<String>> loginUser(@Validated @RequestBody UserCredentialsDto userCredentialsDto) {
+    public ResponseEntity<ResponseDto> loginUser(@Validated @RequestBody UserCredentialsDto userCredentialsDto) {
 
 
         String accessToken = authenticationService
@@ -57,11 +58,12 @@ public class AuthenticationController {
                         userCredentialsDto.getPassword());
 
 
-        CustomApiResponse<String> response = new CustomApiResponse<>(
+        ResponseDto response = new ResponseDto(
                 HttpStatus.OK.value(),
                 UserConstants.USER_AUTHENTICATION_SUCCESSFULLY,
                 accessToken,
                 LocalDateTime.now());
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }

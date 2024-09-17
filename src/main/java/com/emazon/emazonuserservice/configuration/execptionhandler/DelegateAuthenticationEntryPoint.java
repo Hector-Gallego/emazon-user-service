@@ -15,7 +15,6 @@ import java.io.IOException;
 public class DelegateAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 
-
     private final HandlerExceptionResolver resolver;
     public DelegateAuthenticationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.resolver = resolver;
@@ -25,4 +24,5 @@ public class DelegateAuthenticationEntryPoint implements AuthenticationEntryPoin
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         resolver.resolveException(request, response, null, authException);
     }
+
 }

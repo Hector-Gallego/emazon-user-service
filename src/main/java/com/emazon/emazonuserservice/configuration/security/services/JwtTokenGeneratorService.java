@@ -1,7 +1,10 @@
 package com.emazon.emazonuserservice.configuration.security.services;
 
 import com.emazon.emazonuserservice.configuration.security.config.CustomUserDetails;
-import com.emazon.emazonuserservice.configuration.security.util.SecurityConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.ClaimTokenConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.ErrorMessageConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.SecurityConstants;
+import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -14,36 +17,38 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
-public class TokenGeneratorService {
+public class JwtTokenGeneratorService {
 
     @Value("${jwt.time.expiration}")
     private Integer timeExpiration;
 
+
     private final JwtEncoder tokenEncoder;
-    public TokenGeneratorService(JwtEncoder tokenEncoder) {
+    public JwtTokenGeneratorService(JwtEncoder tokenEncoder) {
         this.tokenEncoder = tokenEncoder;
     }
 
-    public String GenerateToken(Authentication authentication){
+    public String generateJwtToken(Authentication authentication){
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Instant now = Instant.now();
 
-        String roles = authentication
+        String role =  authentication
                 .getAuthorities()
                 .stream()
+                .findFirst()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(SecurityConstants.SPACE_FILED));
+                .orElseThrow(() -> new RoleNotFoundException(ErrorMessageConstants.ROLE_NOT_FOUND));
 
 
         Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_USERID, userDetails.getId());
-        claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_NAME, userDetails.getName());
-        claimsMap.put(SecurityConstants.CLAIM_NAME_FIELD_ROLES, roles);
+        claimsMap.put(ClaimTokenConstants.CLAIM_NAME_FIELD_USERID, userDetails.getId());
+        claimsMap.put(ClaimTokenConstants.CLAIM_NAME_FIELD_NAME, userDetails.getName());
+        claimsMap.put(ClaimTokenConstants.CLAIM_NAME_FIELD_ROLE, role);
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet
                 .builder()

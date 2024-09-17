@@ -51,6 +51,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return  buildErrorResponse(exception, HttpStatus.BAD_REQUEST, Collections.emptyList());
     }
 
+
+
     @ExceptionHandler(InvalidBearerTokenException.class)
     public ResponseEntity<ErrorResponse> handleInvalidBearerTokenException(InvalidBearerTokenException exception) {
         return buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());

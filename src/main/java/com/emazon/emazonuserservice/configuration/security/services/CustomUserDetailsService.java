@@ -1,8 +1,8 @@
 package com.emazon.emazonuserservice.configuration.security.services;
 
 import com.emazon.emazonuserservice.configuration.security.config.CustomUserDetails;
-import com.emazon.emazonuserservice.ports.driven.mapper.UserToUserEntityMapper;
-import com.emazon.emazonuserservice.ports.driven.repository.UserRepository;
+import com.emazon.emazonuserservice.configuration.security.constants.ErrorMessageConstants;
+import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,24 +12,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final UserToUserEntityMapper userMapper;
 
-    public CustomUserDetailsService(UserRepository userRepository, UserToUserEntityMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
+    private final UserPersistencePort userPersistencePort;
+
+    public CustomUserDetailsService(UserPersistencePort userPersistencePort) {
+        this.userPersistencePort = userPersistencePort;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        return  userRepository.findByEmail(username)
-                .map(userMapper::userEntityToUser)
+        return  userPersistencePort.findByEmail(username)
                 .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format(ErrorMessageConstants.USER_NOT_FOUND, username)));
 
     }
-
 
 }

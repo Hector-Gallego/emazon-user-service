@@ -1,5 +1,6 @@
 package com.emazon.emazonuserservice.factory;
 
+import com.emazon.emazonuserservice.configuration.security.dto.UserCredentialsDto;
 import com.emazon.emazonuserservice.domain.model.Role;
 import com.emazon.emazonuserservice.domain.model.User;
 import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
@@ -101,6 +102,10 @@ public final class TestDataFactory {
                 .password(createValidUser().getPassword())
                 .role(createValidUser().getRole())
                 .build();
+    }
+
+    public static UserCredentialsDto createUserCredentials() {
+        return new UserCredentialsDto("admin@gmail.com", "Admin1234");
     }
 
 

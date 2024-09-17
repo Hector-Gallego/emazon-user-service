@@ -3,8 +3,9 @@ package com.emazon.emazonuserservice.configuration.security.config;
 
 import com.emazon.emazonuserservice.configuration.execptionhandler.DelegateAccessDeniedHandler;
 import com.emazon.emazonuserservice.configuration.execptionhandler.DelegateAuthenticationEntryPoint;
-import com.emazon.emazonuserservice.configuration.security.util.ApiEndPointsConstants;
-import com.emazon.emazonuserservice.configuration.security.util.SecurityConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.ApiEndPointsConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.ClaimTokenConstants;
+import com.emazon.emazonuserservice.configuration.security.constants.SecurityConstants;
 import com.emazon.emazonuserservice.configuration.security.services.CustomUserDetailsService;
 import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
 import com.nimbusds.jose.jwk.JWK;
@@ -40,6 +41,7 @@ public class SecurityConfig {
 
 
     private final RsaKeyProperties rsaKeys;
+
     private final DelegateAuthenticationEntryPoint authEntryPoint;
     private final DelegateAccessDeniedHandler accessDeniedHandler;
 
@@ -57,8 +59,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ApiEndPointsConstants.USER_LOGIN).permitAll()
-                        .requestMatchers(ApiEndPointsConstants.USER_WAREHOUSE_ASSISTANT).hasAuthority(RoleNameConstants.ADMIN.name())
+                        .requestMatchers(ApiEndPointsConstants.USER_LOGIN_URI).permitAll()
+                        .requestMatchers(ApiEndPointsConstants.USER_WAREHOUSE_ASSISTANT_URI).hasAuthority(RoleNameConstants.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess
@@ -82,7 +84,7 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(SecurityConstants.CLAIM_NAME_FIELD_ROLES);
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(ClaimTokenConstants.CLAIM_NAME_FIELD_ROLE);
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix(SecurityConstants.BLANK_FIELD);
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();

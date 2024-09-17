@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
-    private final TokenGeneratorService tokenGeneratorService;
+    private final JwtTokenGeneratorService jwtTokenGeneratorService;
 
-    public AuthenticationService(AuthenticationManager authenticationManager, TokenGeneratorService tokenGeneratorService) {
+    public AuthenticationService(AuthenticationManager authenticationManager, JwtTokenGeneratorService jwtTokenGeneratorService) {
         this.authenticationManager = authenticationManager;
-        this.tokenGeneratorService = tokenGeneratorService;
+        this.jwtTokenGeneratorService = jwtTokenGeneratorService;
     }
 
     public String authenticatedAndGenerateJwtToken(String username, String password){
@@ -23,6 +23,6 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        return tokenGeneratorService.GenerateToken(authentication);
+        return jwtTokenGeneratorService.generateJwtToken(authentication);
     }
 }
