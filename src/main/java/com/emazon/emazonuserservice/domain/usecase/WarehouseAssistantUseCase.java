@@ -1,21 +1,25 @@
 package com.emazon.emazonuserservice.domain.usecase;
 
-import com.emazon.emazonuserservice.domain.api.IUserServicePort;
+import com.emazon.emazonuserservice.domain.ports.api.UserServicePort;
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.exception.UserAlreadyExistException;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.spi.IUserPersistencePort;
-import com.emazon.emazonuserservice.domain.util.RoleConstants;
-import com.emazon.emazonuserservice.domain.util.UserValidatorUtil;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.ports.sec.PasswordEncoderPort;
+import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.validators.UserValidatorUtil;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 
-public class WarehouseAssistantUseCase implements IUserServicePort {
+public class WarehouseAssistantUseCase implements UserServicePort {
 
-    private final IUserPersistencePort userPersistencePort;
+    private final UserPersistencePort userPersistencePort;
+    private final PasswordEncoderPort passwordEncoder;
 
-    public WarehouseAssistantUseCase(IUserPersistencePort userPersistencePort) {
+    public WarehouseAssistantUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoder) {
         this.userPersistencePort = userPersistencePort;
+        this.passwordEncoder = passwordEncoder;
     }
+
 
     @Override
     public void saveWareHouseAssistant(User user) {
@@ -28,19 +32,15 @@ public class WarehouseAssistantUseCase implements IUserServicePort {
                             user.getIdentityDocument()));
         }
 
-
-
-        if (Boolean.FALSE.equals(userPersistencePort.rolNameExist(RoleConstants.WAREHOUSE_ASSISTANT.name()))) {
+        if (Boolean.FALSE.equals(userPersistencePort.rolNameExist(RoleNameConstants.WAREHOUSE_ASSISTANT.name()))) {
             throw new RoleNotFoundException(
                     String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
-                            RoleConstants.WAREHOUSE_ASSISTANT.name())
+                            RoleNameConstants.WAREHOUSE_ASSISTANT.name())
             );
-
         }
 
-        userPersistencePort.saveUser(user);
-
-
+        String encodePassword = passwordEncoder.encodePassword(user.getPassword());
+        userPersistencePort.saveUser(user, encodePassword);
 
     }
 }

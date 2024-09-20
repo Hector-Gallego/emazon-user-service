@@ -2,54 +2,51 @@ package com.emazon.emazonuserservice.ports.driven.adapter;
 
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.spi.IUserPersistencePort;
-import com.emazon.emazonuserservice.domain.util.RoleConstants;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 import com.emazon.emazonuserservice.ports.driven.entity.RoleEntity;
 import com.emazon.emazonuserservice.ports.driven.entity.UserEntity;
 import com.emazon.emazonuserservice.ports.driven.mapper.UserToUserEntityMapper;
-import com.emazon.emazonuserservice.ports.driven.repository.IRoleRepository;
-import com.emazon.emazonuserservice.ports.driven.repository.IUserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.emazon.emazonuserservice.ports.driven.repository.RoleRepository;
+import com.emazon.emazonuserservice.ports.driven.repository.UserRepository;
 
-public class UserJpaAdapter implements IUserPersistencePort {
+import java.util.Optional;
+
+public class UserJpaAdapter implements UserPersistencePort {
 
 
-    private final IUserRepository warehouseAssistantRepository;
-    private final IRoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserToUserEntityMapper userToUserEntityMapper;
 
-    public UserJpaAdapter(IUserRepository warehouseAssistantRepository, IRoleRepository roleRepository, PasswordEncoder passwordEncoder, UserToUserEntityMapper userToUserEntityMapper) {
-        this.warehouseAssistantRepository = warehouseAssistantRepository;
+    public UserJpaAdapter(UserRepository userRepository, RoleRepository roleRepository, UserToUserEntityMapper userToUserEntityMapper) {
+        this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
         this.userToUserEntityMapper = userToUserEntityMapper;
     }
 
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user, String encodePassword) {
 
         RoleEntity roleEntity = roleRepository
-                .findByName(RoleConstants.WAREHOUSE_ASSISTANT.name())
+                .findByName(RoleNameConstants.WAREHOUSE_ASSISTANT.name())
                 .orElseThrow(() -> new RoleNotFoundException(
                         String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
-                                RoleConstants.WAREHOUSE_ASSISTANT)
+                                RoleNameConstants.WAREHOUSE_ASSISTANT)
                 ));
 
         UserEntity assistantEntity = userToUserEntityMapper.userToUserEntity(user);
-
-        //mover al caso de uso - crear un metodo en el puerto
-        assistantEntity.setPassword(passwordEncoder.encode(assistantEntity.getPassword()));
+        assistantEntity.setPassword(encodePassword);
 
         assistantEntity.setRole(roleEntity);
-        warehouseAssistantRepository.save(assistantEntity);
+        userRepository.save(assistantEntity);
     }
 
     @Override
     public Boolean existByIdentityDocument(String identityDocument) {
-        return warehouseAssistantRepository.findByIdentityDocument(identityDocument).isPresent();
+        return userRepository.findByIdentityDocument(identityDocument).isPresent();
     }
 
     @Override
@@ -57,5 +54,11 @@ public class UserJpaAdapter implements IUserPersistencePort {
         return roleRepository.findByName(role).isPresent();
     }
 
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userToUserEntityMapper::userEntityToUser);
+    }
 
 }

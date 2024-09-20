@@ -1,8 +1,9 @@
 package com.emazon.emazonuserservice.factory;
 
+import com.emazon.emazonuserservice.ports.driving.dto.request.UserCredentialsRequestDto;
 import com.emazon.emazonuserservice.domain.model.Role;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.util.RoleConstants;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 
 import java.time.LocalDate;
 
@@ -29,7 +30,7 @@ public final class TestDataFactory {
 
     public static Role createWarehouseAssistantRole() {
         Role role = new Role();
-        role.setName(RoleConstants.WAREHOUSE_ASSISTANT.name());
+        role.setName(RoleNameConstants.WAREHOUSE_ASSISTANT.name());
         return role;
     }
 
@@ -101,6 +102,10 @@ public final class TestDataFactory {
                 .password(createValidUser().getPassword())
                 .role(createValidUser().getRole())
                 .build();
+    }
+
+    public static UserCredentialsRequestDto createUserCredentials() {
+        return new UserCredentialsRequestDto("admin@gmail.com", "Admin1234");
     }
 
 

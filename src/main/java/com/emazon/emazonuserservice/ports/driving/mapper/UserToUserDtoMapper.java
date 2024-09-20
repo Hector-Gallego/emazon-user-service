@@ -1,7 +1,7 @@
 package com.emazon.emazonuserservice.ports.driving.mapper;
 
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.ports.driving.dto.UserRequestDto;
+import com.emazon.emazonuserservice.ports.driving.dto.request.UserRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
