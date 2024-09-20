@@ -1,9 +1,10 @@
 package com.emazon.emazonuserservice.configuration.execptionhandler;
 
+import com.emazon.emazonuserservice.domain.exception.CredentialsInvalidFormatException;
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.exception.UserAlreadyExistException;
 import com.emazon.emazonuserservice.domain.exception.UserValidationException;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,40 +34,56 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(UserValidationException.class)
-    public ResponseEntity<ErrorResponse> handleUserValidationException(UserValidationException exception) {
+    public ResponseEntity<CustomErrorResponse> handleUserValidationException(UserValidationException exception) {
+        return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, exception.getErrors());
+    }
+    @ExceptionHandler(CredentialsInvalidFormatException.class)
+    public ResponseEntity<CustomErrorResponse> handleCredentialsInvalidFormatException(CredentialsInvalidFormatException exception) {
         return buildErrorResponse(exception, HttpStatus.BAD_REQUEST, exception.getErrors());
     }
 
     @ExceptionHandler(RoleNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleRoleNotFoundException(RoleNotFoundException exception){
+    public ResponseEntity<CustomErrorResponse> handleRoleNotFoundException(RoleNotFoundException exception){
         return  buildErrorResponse(exception, HttpStatus.BAD_REQUEST, Collections.emptyList());
     }
 
     @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExistException(UserAlreadyExistException exception){
+    public ResponseEntity<CustomErrorResponse> handleUserAlreadyExistException(UserAlreadyExistException exception){
         return  buildErrorResponse(exception, HttpStatus.BAD_REQUEST, Collections.emptyList());
     }
 
     @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<ErrorResponse> handleDateTimeParseException(DateTimeParseException exception){
+    public ResponseEntity<CustomErrorResponse> handleDateTimeParseException(DateTimeParseException exception){
         return  buildErrorResponse(exception, HttpStatus.BAD_REQUEST, Collections.emptyList());
     }
 
-
-
     @ExceptionHandler(InvalidBearerTokenException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidBearerTokenException(InvalidBearerTokenException exception) {
+    public ResponseEntity<CustomErrorResponse> handleInvalidBearerTokenException(InvalidBearerTokenException exception) {
         return buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception){
+    public ResponseEntity<CustomErrorResponse> handleAccessDeniedException(AccessDeniedException exception){
         return  buildErrorResponse(exception, HttpStatus.FORBIDDEN, Collections.emptyList());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception){
+    public ResponseEntity<CustomErrorResponse> handleBadCredentialsException(BadCredentialsException exception){
         return  buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());
+    }
+
+
+    @ExceptionHandler(InsufficientAuthenticationException.class)
+    public ResponseEntity<CustomErrorResponse> handleBadCredentialsException(InsufficientAuthenticationException exception){
+        return  buildErrorResponse(exception, HttpStatus.UNAUTHORIZED, Collections.emptyList());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<CustomErrorResponse> handleRuntimeException(RuntimeException exception){
+
+        return buildErrorResponse(exception,
+                HttpStatus.INTERNAL_SERVER_ERROR, Collections.emptyList());
+
     }
 
 
@@ -82,7 +100,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
-        ErrorResponse response = new ErrorResponse(
+        CustomErrorResponse response = new CustomErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS,
                 errorList,
@@ -102,7 +120,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             @Nullable HttpStatusCode status,
             @Nullable WebRequest request) {
 
-        ErrorResponse response = new ErrorResponse(
+        CustomErrorResponse response = new CustomErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 ValidationErrorConstants.INVALID_DATA_FORMAT,
                 Collections.emptyList(),
@@ -114,13 +132,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
 
-    private ResponseEntity<ErrorResponse> buildErrorResponse(Exception exception,  HttpStatus status, List<String> errors) {
-        ErrorResponse errorResponse = new ErrorResponse(
+    private ResponseEntity<CustomErrorResponse> buildErrorResponse(Exception exception, HttpStatus status, List<String> errors) {
+        CustomErrorResponse customErrorResponse = new CustomErrorResponse(
                 status.value(),
                 exception.getMessage(),
                 errors,
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorResponse, status);
+        return new ResponseEntity<>(customErrorResponse, status);
     }
 }

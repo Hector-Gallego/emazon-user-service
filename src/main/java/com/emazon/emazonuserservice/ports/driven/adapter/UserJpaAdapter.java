@@ -1,18 +1,15 @@
 package com.emazon.emazonuserservice.ports.driven.adapter;
 
-import com.emazon.emazonuserservice.configuration.security.constants.SecurityConstants;
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.model.User;
 import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
-import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
-import com.emazon.emazonuserservice.domain.util.UserConstants;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 import com.emazon.emazonuserservice.ports.driven.entity.RoleEntity;
 import com.emazon.emazonuserservice.ports.driven.entity.UserEntity;
 import com.emazon.emazonuserservice.ports.driven.mapper.UserToUserEntityMapper;
 import com.emazon.emazonuserservice.ports.driven.repository.RoleRepository;
 import com.emazon.emazonuserservice.ports.driven.repository.UserRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 

@@ -2,8 +2,8 @@ package com.emazon.emazonuserservice.domain.validators;
 
 import com.emazon.emazonuserservice.domain.exception.UserValidationException;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.util.RegexConstants;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.constants.RegexConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 
 import java.time.LocalDate;
 import java.time.Period;

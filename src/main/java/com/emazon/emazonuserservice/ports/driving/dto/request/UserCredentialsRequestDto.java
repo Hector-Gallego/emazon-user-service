@@ -1,7 +1,6 @@
-package com.emazon.emazonuserservice.configuration.security.dto;
+package com.emazon.emazonuserservice.ports.driving.dto.request;
 
 import com.emazon.emazonuserservice.configuration.security.constants.ErrorMessageConstants;
-import com.emazon.emazonuserservice.configuration.security.constants.SecurityConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCredentialsDto {
+public class UserCredentialsRequestDto {
 
     @NotBlank(message= ErrorMessageConstants.FIELD_PASSWORD_EMPTY_OR_NULL)
     @NotNull(message = ErrorMessageConstants.FIELD_USERNAME_EMPTY_OR_NULL)

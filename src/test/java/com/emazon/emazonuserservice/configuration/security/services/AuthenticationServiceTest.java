@@ -1,6 +1,6 @@
 package com.emazon.emazonuserservice.configuration.security.services;
 
-import com.emazon.emazonuserservice.configuration.security.dto.UserCredentialsDto;
+import com.emazon.emazonuserservice.ports.driving.dto.request.UserCredentialsRequestDto;
 import com.emazon.emazonuserservice.factory.TestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class AuthenticationServiceTest {
     @Test
     void shouldGenerateJwtTokenWhenUserIsAuthenticated() {
 
-        UserCredentialsDto userCredentials = TestDataFactory.createUserCredentials();
+        UserCredentialsRequestDto userCredentials = TestDataFactory.createUserCredentials();
         String mockToken = "mockToken";
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -44,8 +44,7 @@ class AuthenticationServiceTest {
                 .thenReturn(mockToken);
 
 
-        String token = authenticationService
-                .authenticatedAndGenerateJwtToken(
+        String token = authenticationService.authenticatedUserAndGeneratedToken(
                         userCredentials.getUsername(),
                         userCredentials.getPassword());
 
@@ -64,14 +63,14 @@ class AuthenticationServiceTest {
     @Test
     void shouldThrowBadCredentialsExceptionWhenUserCredentialsAreInvalid() {
 
-        UserCredentialsDto userCredentials = TestDataFactory.createUserCredentials();
+        UserCredentialsRequestDto userCredentials = TestDataFactory.createUserCredentials();
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid credentials"));
 
 
         BadCredentialsException exception = assertThrows(
                 BadCredentialsException.class,
-                () -> authenticationService.authenticatedAndGenerateJwtToken(
+                () -> authenticationService.authenticatedUserAndGeneratedToken(
                                 userCredentials.getUsername(),
                                 userCredentials.getPassword())
         );

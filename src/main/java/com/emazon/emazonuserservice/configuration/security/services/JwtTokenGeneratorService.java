@@ -7,11 +7,10 @@ import com.emazon.emazonuserservice.configuration.security.constants.SecurityCon
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Service
+
 public class JwtTokenGeneratorService {
 
     @Value("${jwt.time.expiration}")

@@ -7,7 +7,7 @@ import com.emazon.emazonuserservice.configuration.security.constants.ApiEndPoint
 import com.emazon.emazonuserservice.configuration.security.constants.ClaimTokenConstants;
 import com.emazon.emazonuserservice.configuration.security.constants.SecurityConstants;
 import com.emazon.emazonuserservice.configuration.security.services.CustomUserDetailsService;
-import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -73,9 +73,7 @@ public class SecurityConfig {
                         })
                         .authenticationEntryPoint(authEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler)
-
                 );
-
 
         return http.build();
     }
@@ -121,6 +119,5 @@ public class SecurityConfig {
     JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
-
 
 }

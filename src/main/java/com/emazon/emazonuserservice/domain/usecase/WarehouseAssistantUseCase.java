@@ -6,9 +6,9 @@ import com.emazon.emazonuserservice.domain.exception.UserAlreadyExistException;
 import com.emazon.emazonuserservice.domain.model.User;
 import com.emazon.emazonuserservice.domain.ports.sec.PasswordEncoderPort;
 import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
-import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 import com.emazon.emazonuserservice.domain.validators.UserValidatorUtil;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 
 public class WarehouseAssistantUseCase implements UserServicePort {
 

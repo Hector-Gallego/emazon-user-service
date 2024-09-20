@@ -1,4 +1,4 @@
-package com.emazon.emazonuserservice.configuration.security.dto;
+package com.emazon.emazonuserservice.ports.driving.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
-public class ResponseDto {
+public class UserAuthenticationResponse {
 
     private Integer status;
     private String message;

@@ -1,4 +1,4 @@
-package com.emazon.emazonuserservice.domain.util;
+package com.emazon.emazonuserservice.domain.constants;
 
 public final class UserConstants {
     private UserConstants(){

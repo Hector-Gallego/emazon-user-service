@@ -1,8 +1,8 @@
-package com.emazon.emazonuserservice.ports.driving.dto;
+package com.emazon.emazonuserservice.ports.driving.dto.request;
 
-import com.emazon.emazonuserservice.domain.util.RegexConstants;
-import com.emazon.emazonuserservice.domain.util.ValidationErrorConstants;
-import com.emazon.emazonuserservice.ports.util.OpenApiConstants;
+import com.emazon.emazonuserservice.domain.constants.RegexConstants;
+import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
+import com.emazon.emazonuserservice.configuration.openapi.constants.OpenApiConstants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;

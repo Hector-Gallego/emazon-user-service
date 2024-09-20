@@ -1,4 +1,4 @@
-package com.emazon.emazonuserservice.domain.util;
+package com.emazon.emazonuserservice.domain.constants;
 
 public final class ValidationErrorConstants {
 
@@ -20,6 +20,7 @@ public final class ValidationErrorConstants {
     public static final String USER_ALREADY_EXIST = "A user with the identity document %s already exists.";
     public static final String ROLE_NOT_FOUND = "A role %s not found.";
     public static final String DATE_PATTERN = "dd/MM/yyyy";
+
 
 
 

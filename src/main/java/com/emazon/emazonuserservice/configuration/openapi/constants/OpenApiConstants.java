@@ -1,10 +1,15 @@
-package com.emazon.emazonuserservice.ports.util;
+package com.emazon.emazonuserservice.configuration.openapi.constants;
 
 public final class OpenApiConstants {
 
     private OpenApiConstants(){
         throw new IllegalStateException();
     }
+
+
+    public static final String OPENAPI_TITTLE = "Emazon user service API";
+    public static final String OPENAPI_VERSION = "1.0";
+    public static final String OPENAPI_DESCRIPTION = "API for the user microservice of the eAmazon e-commerce platform";
 
     public static final String OPENAPI_CODE_400 = "400";
     public static final String OPENAPI_CODE_500 = "500";

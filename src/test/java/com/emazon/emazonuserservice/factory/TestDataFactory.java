@@ -1,9 +1,9 @@
 package com.emazon.emazonuserservice.factory;
 
-import com.emazon.emazonuserservice.configuration.security.dto.UserCredentialsDto;
+import com.emazon.emazonuserservice.ports.driving.dto.request.UserCredentialsRequestDto;
 import com.emazon.emazonuserservice.domain.model.Role;
 import com.emazon.emazonuserservice.domain.model.User;
-import com.emazon.emazonuserservice.domain.util.RoleNameConstants;
+import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 
 import java.time.LocalDate;
 
@@ -104,8 +104,8 @@ public final class TestDataFactory {
                 .build();
     }
 
-    public static UserCredentialsDto createUserCredentials() {
-        return new UserCredentialsDto("admin@gmail.com", "Admin1234");
+    public static UserCredentialsRequestDto createUserCredentials() {
+        return new UserCredentialsRequestDto("admin@gmail.com", "Admin1234");
     }
 
 

@@ -1,13 +1,12 @@
 package com.emazon.emazonuserservice.configuration.security.services;
 
+import com.emazon.emazonuserservice.domain.ports.sec.AuthenticationSecurityPort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
 
 
-@Service
-public class AuthenticationService {
+public class AuthenticationService implements AuthenticationSecurityPort {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenGeneratorService jwtTokenGeneratorService;
@@ -17,7 +16,8 @@ public class AuthenticationService {
         this.jwtTokenGeneratorService = jwtTokenGeneratorService;
     }
 
-    public String authenticatedAndGenerateJwtToken(String username, String password){
+    @Override
+    public String authenticatedUserAndGeneratedToken(String username, String password) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
@@ -25,4 +25,6 @@ public class AuthenticationService {
 
         return jwtTokenGeneratorService.generateJwtToken(authentication);
     }
+
+
 }
