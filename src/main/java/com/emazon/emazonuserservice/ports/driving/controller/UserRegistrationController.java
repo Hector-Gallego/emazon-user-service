@@ -21,13 +21,13 @@ import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping("/api/user/warehouseAssistant")
-public class WarehouseAssistantController {
+@RequestMapping("/api/user")
+public class UserRegistrationController {
 
     private final UserServicePort userServicePort;
     private final UserToUserDtoMapper userToUserDtoMapper;
 
-    public WarehouseAssistantController(UserServicePort userServicePort, UserToUserDtoMapper userToUserDtoMapper) {
+    public UserRegistrationController(UserServicePort userServicePort, UserToUserDtoMapper userToUserDtoMapper) {
         this.userServicePort = userServicePort;
         this.userToUserDtoMapper = userToUserDtoMapper;
     }
@@ -51,10 +51,45 @@ public class WarehouseAssistantController {
                     content = @Content(mediaType = OpenApiConstants.OPENAPI_MEDIA_TYPE_JSON,
                             schema = @Schema(implementation = CustomErrorResponse.class)))
     })
-    @PostMapping
+    @PostMapping("/warehouseAssistant")
     public ResponseEntity<UserRegisterResponse> saveWarehouseAssistant(@RequestBody UserRequestDto userRequestDto){
 
         userServicePort.saveWareHouseAssistant(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
+
+
+        UserRegisterResponse response = new UserRegisterResponse(
+                HttpStatus.OK.value(),
+                UserConstants.USER_CREATED_SUCCESSFULLY,
+                LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+
+
+
+    @Operation(summary = OpenApiConstants.OPENAPI_CREATE_USER_SUMMARY,
+            description = OpenApiConstants.OPENAPI_CREATE_USER_DESCRIPTION)
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = OpenApiConstants.OPENAPI_CODE_200,
+                    description = OpenApiConstants.USER_CREATED,
+                    content = @Content(mediaType = OpenApiConstants.OPENAPI_MEDIA_TYPE_JSON,
+                            schema = @Schema(implementation = UserRegisterResponse.class))),
+            @ApiResponse(responseCode = OpenApiConstants.OPENAPI_CODE_400,
+                    description = OpenApiConstants.INVALID_INPUT,
+                    content = @Content(mediaType = OpenApiConstants.OPENAPI_MEDIA_TYPE_JSON,
+                            schema = @Schema(implementation = CustomErrorResponse.class))),
+            @ApiResponse(responseCode = OpenApiConstants.OPENAPI_CODE_500,
+                    description = OpenApiConstants.OPENAPI_INTERNAL_SERVER_ERROR,
+                    content = @Content(mediaType = OpenApiConstants.OPENAPI_MEDIA_TYPE_JSON,
+                            schema = @Schema(implementation = CustomErrorResponse.class)))
+    })
+    @PostMapping("/client")
+    public ResponseEntity<UserRegisterResponse> saveClient(@RequestBody UserRequestDto userRequestDto){
+
+        userServicePort.saveClient(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
 
 
         UserRegisterResponse response = new UserRegisterResponse(

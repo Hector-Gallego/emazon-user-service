@@ -7,10 +7,9 @@ import java.util.Optional;
 
 public interface UserPersistencePort {
 
-    void saveUser(User warehouseAssistant, String encodePassword);
+    void saveUser(User warehouseAssistant, String encodePassword, String role);
     Boolean existByIdentityDocument(String identityDocument);
     Boolean rolNameExist(String role);
     Optional<User> findByEmail(String email);
-
 
 }

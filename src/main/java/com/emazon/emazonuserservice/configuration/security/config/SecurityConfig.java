@@ -34,7 +34,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -59,8 +58,16 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ApiEndPointsConstants.USER_LOGIN_URI).permitAll()
-                        .requestMatchers(ApiEndPointsConstants.USER_WAREHOUSE_ASSISTANT_URI).hasAuthority(RoleNameConstants.ADMIN.name())
+
+                        .requestMatchers(
+                                ApiEndPointsConstants.USER_LOGIN_URI,
+                                ApiEndPointsConstants.REGISTRATION_CLIENT_URI)
+                        .permitAll()
+
+                        .requestMatchers(
+                                ApiEndPointsConstants.REGISTRATION_WAREHOUSE_ASSISTANT_URI)
+                        .hasAuthority(RoleNameConstants.ADMIN.name())
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess

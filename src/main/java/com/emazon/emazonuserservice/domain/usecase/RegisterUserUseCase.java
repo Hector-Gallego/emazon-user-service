@@ -10,12 +10,12 @@ import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 import com.emazon.emazonuserservice.domain.validators.UserValidatorUtil;
 import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 
-public class WarehouseAssistantUseCase implements UserServicePort {
+public class RegisterUserUseCase implements UserServicePort {
 
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoder;
 
-    public WarehouseAssistantUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoder) {
+    public RegisterUserUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoder) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoder = passwordEncoder;
     }
@@ -23,6 +23,16 @@ public class WarehouseAssistantUseCase implements UserServicePort {
 
     @Override
     public void saveWareHouseAssistant(User user) {
+        registerUserByRole(user, RoleNameConstants.WAREHOUSE_ASSISTANT.name());
+    }
+
+    @Override
+    public void saveClient(User user) {
+        registerUserByRole(user, RoleNameConstants.CLIENT.name());
+    }
+
+
+    private void registerUserByRole (User user, String role){
 
         UserValidatorUtil.userFieldsValidated(user);
 
@@ -32,15 +42,14 @@ public class WarehouseAssistantUseCase implements UserServicePort {
                             user.getIdentityDocument()));
         }
 
-        if (Boolean.FALSE.equals(userPersistencePort.rolNameExist(RoleNameConstants.WAREHOUSE_ASSISTANT.name()))) {
+        if (Boolean.FALSE.equals(userPersistencePort.rolNameExist(role))) {
             throw new RoleNotFoundException(
-                    String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
-                            RoleNameConstants.WAREHOUSE_ASSISTANT.name())
+                    String.format(ValidationErrorConstants.ROLE_NOT_FOUND, role)
             );
         }
 
         String encodePassword = passwordEncoder.encodePassword(user.getPassword());
-        userPersistencePort.saveUser(user, encodePassword);
+        userPersistencePort.saveUser(user, encodePassword, role);
 
     }
 }

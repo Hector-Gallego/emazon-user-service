@@ -3,7 +3,6 @@ package com.emazon.emazonuserservice.ports.driven.adapter;
 import com.emazon.emazonuserservice.domain.exception.RoleNotFoundException;
 import com.emazon.emazonuserservice.domain.model.User;
 import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
-import com.emazon.emazonuserservice.domain.constants.RoleNameConstants;
 import com.emazon.emazonuserservice.domain.constants.ValidationErrorConstants;
 import com.emazon.emazonuserservice.ports.driven.entity.RoleEntity;
 import com.emazon.emazonuserservice.ports.driven.entity.UserEntity;
@@ -28,19 +27,20 @@ public class UserJpaAdapter implements UserPersistencePort {
 
 
     @Override
-    public void saveUser(User user, String encodePassword) {
+    public void saveUser(User user, String encodePassword, String role) {
 
         RoleEntity roleEntity = roleRepository
-                .findByName(RoleNameConstants.WAREHOUSE_ASSISTANT.name())
+                .findByName(role)
                 .orElseThrow(() -> new RoleNotFoundException(
                         String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
-                                RoleNameConstants.WAREHOUSE_ASSISTANT)
+                                role)
                 ));
 
         UserEntity assistantEntity = userToUserEntityMapper.userToUserEntity(user);
-        assistantEntity.setPassword(encodePassword);
 
+        assistantEntity.setPassword(encodePassword);
         assistantEntity.setRole(roleEntity);
+
         userRepository.save(assistantEntity);
     }
 

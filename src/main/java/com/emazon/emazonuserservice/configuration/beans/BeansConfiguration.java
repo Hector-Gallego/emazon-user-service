@@ -8,7 +8,7 @@ import com.emazon.emazonuserservice.domain.ports.sec.PasswordEncoderPort;
 import com.emazon.emazonuserservice.domain.ports.sec.AuthenticationSecurityPort;
 import com.emazon.emazonuserservice.domain.ports.spi.UserPersistencePort;
 import com.emazon.emazonuserservice.domain.usecase.UserAuthenticationUseCase;
-import com.emazon.emazonuserservice.domain.usecase.WarehouseAssistantUseCase;
+import com.emazon.emazonuserservice.domain.usecase.RegisterUserUseCase;
 import com.emazon.emazonuserservice.ports.driven.adapter.UserJpaAdapter;
 import com.emazon.emazonuserservice.ports.driven.mapper.UserToUserEntityMapper;
 import com.emazon.emazonuserservice.ports.driven.repository.RoleRepository;
@@ -42,7 +42,7 @@ public class BeansConfiguration {
 
     @Bean
     UserServicePort userServicePort(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoder){
-        return new WarehouseAssistantUseCase(userPersistencePort, passwordEncoder);
+        return new RegisterUserUseCase(userPersistencePort, passwordEncoder);
     }
 
     @Bean

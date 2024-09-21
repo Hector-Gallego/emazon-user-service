@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class WarehouseAssistantUseCaseTest {
+class RegisterUserUseCaseTest {
 
     @Mock
     private UserPersistencePort userPersistencePort;
@@ -31,25 +31,44 @@ class WarehouseAssistantUseCaseTest {
     PasswordEncoderPort passwordEncoder;
 
     @InjectMocks
-    private WarehouseAssistantUseCase warehouseAssistantUseCase;
+    private RegisterUserUseCase registerUserUseCase;
 
     @Test
     void shouldSaveWarehouseAssistantSuccessfully() {
 
         String encodePassword = "Encode Password";
         User user = TestDataFactory.createValidUser();
+        String role = RoleNameConstants.WAREHOUSE_ASSISTANT.name();
 
         when(userPersistencePort.existByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
         when(userPersistencePort.rolNameExist(RoleNameConstants.WAREHOUSE_ASSISTANT.name())).thenReturn(true);
         when(passwordEncoder.encodePassword(user.getPassword())).thenReturn(encodePassword);
 
 
-        warehouseAssistantUseCase.saveWareHouseAssistant(user);
+        registerUserUseCase.saveWareHouseAssistant(user);
 
-        verify(userPersistencePort, times(1)).saveUser(user, encodePassword);
+        verify(userPersistencePort, times(1)).saveUser(user, encodePassword, role);
 
     }
 
+
+    @Test
+    void shouldSaveClientSuccessfully() {
+
+        String encodePassword = "Encode Password";
+        User user = TestDataFactory.createValidUser();
+        String role = RoleNameConstants.CLIENT.name();
+
+        when(userPersistencePort.existByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
+        when(userPersistencePort.rolNameExist(RoleNameConstants.CLIENT.name())).thenReturn(true);
+        when(passwordEncoder.encodePassword(user.getPassword())).thenReturn(encodePassword);
+
+
+        registerUserUseCase.saveClient(user);
+
+        verify(userPersistencePort, times(1)).saveUser(user, encodePassword, role);
+
+    }
 
     @Test
     void shouldThrowValidationExceptionForInvalidFields() {
@@ -58,13 +77,12 @@ class WarehouseAssistantUseCaseTest {
         User user = TestDataFactory.createInvalidUser();
 
         UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
-
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS,
                 exception.getMessage());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
 
 
     }
@@ -78,13 +96,13 @@ class WarehouseAssistantUseCaseTest {
         when(userPersistencePort.existByIdentityDocument(user.getIdentityDocument())).thenReturn(true);
 
         UserAlreadyExistException exception = assertThrows(UserAlreadyExistException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(String.format(ValidationErrorConstants.USER_ALREADY_EXIST,
                         user.getIdentityDocument()),
                 exception.getMessage());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
 
 
     }
@@ -97,13 +115,13 @@ class WarehouseAssistantUseCaseTest {
         when(userPersistencePort.rolNameExist(RoleNameConstants.WAREHOUSE_ASSISTANT.name())).thenReturn(false);
 
         RoleNotFoundException exception = assertThrows(RoleNotFoundException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(String.format(ValidationErrorConstants.ROLE_NOT_FOUND,
                         RoleNameConstants.WAREHOUSE_ASSISTANT.name()),
                 exception.getMessage());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(),anyString());
 
     }
 
@@ -114,7 +132,7 @@ class WarehouseAssistantUseCaseTest {
         User user = TestDataFactory.createInvalidUSerEmail();
 
         UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
 
@@ -123,7 +141,7 @@ class WarehouseAssistantUseCaseTest {
         );
         assertEquals(expectedErrors, exception.getErrors());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
     }
 
 
@@ -133,7 +151,7 @@ class WarehouseAssistantUseCaseTest {
         User user = TestDataFactory.createInvalidUSerPhoneNumber();
 
         UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
 
@@ -142,7 +160,7 @@ class WarehouseAssistantUseCaseTest {
         );
         assertEquals(expectedErrors, exception.getErrors());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(),anyString());
 
     }
 
@@ -152,7 +170,7 @@ class WarehouseAssistantUseCaseTest {
         User user = TestDataFactory.createInvalidUSerIdentityDocument();
 
         UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
 
@@ -161,7 +179,7 @@ class WarehouseAssistantUseCaseTest {
         );
         assertEquals(expectedErrors, exception.getErrors());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
 
     }
 
@@ -171,7 +189,7 @@ class WarehouseAssistantUseCaseTest {
         User user = TestDataFactory.createInvalidUSerPassword();
 
         UserValidationException exception = assertThrows(UserValidationException.class,
-                () -> warehouseAssistantUseCase.saveWareHouseAssistant(user));
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
 
         assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
 
@@ -180,7 +198,7 @@ class WarehouseAssistantUseCaseTest {
         );
         assertEquals(expectedErrors, exception.getErrors());
 
-        verify(userPersistencePort, never()).saveUser(any(User.class), anyString());
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
 
     }
 
