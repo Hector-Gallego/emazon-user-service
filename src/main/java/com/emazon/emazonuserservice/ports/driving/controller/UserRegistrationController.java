@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class UserRegistrationController {
                             schema = @Schema(implementation = CustomErrorResponse.class)))
     })
     @PostMapping("/warehouseAssistant")
-    public ResponseEntity<UserRegisterResponse> saveWarehouseAssistant(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserRegisterResponse> saveWarehouseAssistant(@Valid @RequestBody UserRequestDto userRequestDto){
 
         userServicePort.saveWareHouseAssistant(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
 
@@ -87,7 +88,7 @@ public class UserRegistrationController {
                             schema = @Schema(implementation = CustomErrorResponse.class)))
     })
     @PostMapping("/client")
-    public ResponseEntity<UserRegisterResponse> saveClient(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserRegisterResponse> saveClient(@Valid @RequestBody UserRequestDto userRequestDto){
 
         userServicePort.saveClient(userToUserDtoMapper.userRequestDtoToDomain(userRequestDto));
 

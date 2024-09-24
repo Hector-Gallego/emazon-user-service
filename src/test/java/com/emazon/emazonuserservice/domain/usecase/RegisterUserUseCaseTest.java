@@ -202,6 +202,43 @@ class RegisterUserUseCaseTest {
 
     }
 
+    @Test
+    void shouldThrowExceptionForInvalidName() {
+
+        User user = TestDataFactory.createInvalidUSerName();
+
+        UserValidationException exception = assertThrows(UserValidationException.class,
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
+
+        assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
+
+        List<String> expectedErrors = List.of(
+                ValidationErrorConstants.NULL_OR_EMPTY_NAME_FIELD
+        );
+        assertEquals(expectedErrors, exception.getErrors());
+
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
+
+    }
+    @Test
+    void shouldThrowExceptionForInvalidLastName() {
+
+        User user = TestDataFactory.createInvalidUSerLastName();
+
+        UserValidationException exception = assertThrows(UserValidationException.class,
+                () -> registerUserUseCase.saveWareHouseAssistant(user));
+
+        assertEquals(ValidationErrorConstants.INVALID_ONE_OR_MORE_FIELDS, exception.getMessage());
+
+        List<String> expectedErrors = List.of(
+                ValidationErrorConstants.NULL_OR_EMPTY_LAST_NAME_FIELD
+        );
+        assertEquals(expectedErrors, exception.getErrors());
+
+        verify(userPersistencePort, never()).saveUser(any(User.class), anyString(), anyString());
+
+    }
+
 
 
 }

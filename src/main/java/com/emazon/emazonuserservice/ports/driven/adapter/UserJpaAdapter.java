@@ -36,12 +36,12 @@ public class UserJpaAdapter implements UserPersistencePort {
                                 role)
                 ));
 
-        UserEntity assistantEntity = userToUserEntityMapper.userToUserEntity(user);
+        UserEntity userEntity = userToUserEntityMapper.userToUserEntity(user);
 
-        assistantEntity.setPassword(encodePassword);
-        assistantEntity.setRole(roleEntity);
+        userEntity.setPassword(encodePassword);
+        userEntity.setRole(roleEntity);
 
-        userRepository.save(assistantEntity);
+        userRepository.save(userEntity);
     }
 
     @Override

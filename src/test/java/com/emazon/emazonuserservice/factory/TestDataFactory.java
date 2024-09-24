@@ -90,6 +90,34 @@ public final class TestDataFactory {
                 .build();
     }
 
+    public static User createInvalidUSerName() {
+        return User.builder()
+                .id(createValidUser().getId())
+                .name("")
+                .lastName(createValidUser().getLastName())
+                .identityDocument(createValidUser().getIdentityDocument())
+                .phoneNumber(createValidUser().getPhoneNumber())
+                .birthDate(createValidUser().getBirthDate())
+                .email(createValidUser().getEmail())
+                .password(createValidUser().getPassword())
+                .role(createValidUser().getRole())
+                .build();
+    }
+
+    public static User createInvalidUSerLastName() {
+        return User.builder()
+                .id(createValidUser().getId())
+                .name(createValidUser().getName())
+                .lastName("")
+                .identityDocument(createValidUser().getIdentityDocument())
+                .phoneNumber(createValidUser().getPhoneNumber())
+                .birthDate(createValidUser().getBirthDate())
+                .email(createValidUser().getEmail())
+                .password(createValidUser().getPassword())
+                .role(createValidUser().getRole())
+                .build();
+    }
+
     public static User createInvalidUSerPhoneNumber() {
         return User.builder()
                 .id(createValidUser().getId())

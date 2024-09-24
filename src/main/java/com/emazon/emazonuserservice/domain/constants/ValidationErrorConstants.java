@@ -21,6 +21,16 @@ public final class ValidationErrorConstants {
     public static final String ROLE_NOT_FOUND = "A role %s not found.";
     public static final String DATE_PATTERN = "dd/MM/yyyy";
 
+    public static final String NULL_OR_EMPTY_NAME_FIELD = "Field name cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_LAST_NAME_FIELD = "Field last name cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_IDENTITY_DOCUMENT_FIELD = "Field identity document cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_PHONE_NUMBER_FIELD = "Field phone number cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_BIRTH_DATE_FIELD = "Field birth date cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_EMAIL_FIELD = "Field email cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_PASSWORD_FIELD = "Field password cannot be empty or null.";
+
+
+
 
 
 

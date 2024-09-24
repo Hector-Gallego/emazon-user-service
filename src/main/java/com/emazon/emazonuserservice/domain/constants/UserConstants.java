@@ -8,4 +8,5 @@ public final class UserConstants {
     public static final String USER_CREATED_SUCCESSFULLY = "User has been created successfully.";
     public static final String USER_NOT_FOUND = "User whit %s not found";
     public static final String USER_AUTHENTICATION_SUCCESSFULLY = "User has been authenticated successfully.";
+    public static final Integer MIN_USER_AGE = 18;
 }
