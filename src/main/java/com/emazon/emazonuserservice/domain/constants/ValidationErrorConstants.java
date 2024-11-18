@@ -7,27 +7,25 @@ public final class ValidationErrorConstants {
         throw new IllegalStateException();
     }
 
-    public static final String INVALID_DATA_FORMAT = "Invalid data format detected. Ensure that all fields are correctly formatted according to the specified requirements.";
-    public static final String INVALID_ONE_OR_MORE_FIELDS = "One or more fields are invalid.";
-    public static final String INVALID_EMAIL = "Invalid email format.";
-    public static final String INVALID_PHONE_NUMBER = "Invalid phone number format.";
-    public static final String INVALID_AGE = "User must be 18 years or older.";
-    public static final String INVALID_IDENTITY_DOCUMENT = "Identity document must be numeric.";
-    public static final String NULL_OR_EMPTY_FIELD = "Field cannot be empty or null.";
-    public static final String INVALID_PASSWORD = "Invalid password. It must be at least 8 characters long, " +
-            "include at one number, one uppercase letter, " +
-            "and one lowercase letter.";
-    public static final String USER_ALREADY_EXIST = "A user with the identity document %s already exists.";
-    public static final String ROLE_NOT_FOUND = "A role %s not found.";
+    public static final String INVALID_DATA_FORMAT = "Formato de datos inválido detectado. Asegúrate de que todos los campos estén correctamente formateados según los requisitos especificados.";
+    public static final String INVALID_ONE_OR_MORE_FIELDS = "Uno o más campos son inválidos.";
+    public static final String INVALID_EMAIL = "Formato de correo electrónico inválido.";
+    public static final String INVALID_PHONE_NUMBER = "Formato de número de teléfono inválido.";
+    public static final String INVALID_AGE = "El usuario debe tener 18 años o más.";
+    public static final String INVALID_IDENTITY_DOCUMENT = "El documento de identidad debe ser numérico.";
+    public static final String NULL_OR_EMPTY_FIELD = "El campo no puede estar vacío o nulo.";
+    public static final String INVALID_PASSWORD = "Contraseña inválida. Debe tener al menos 8 caracteres, incluir al menos un número, una letra mayúscula y una letra minúscula.";
+    public static final String USER_ALREADY_EXIST = "Ya existe un usuario con el documento de identidad %s.";
+    public static final String ROLE_NOT_FOUND = "El rol %s no se encontró.";
     public static final String DATE_PATTERN = "dd/MM/yyyy";
 
-    public static final String NULL_OR_EMPTY_NAME_FIELD = "Field name cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_LAST_NAME_FIELD = "Field last name cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_IDENTITY_DOCUMENT_FIELD = "Field identity document cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_PHONE_NUMBER_FIELD = "Field phone number cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_BIRTH_DATE_FIELD = "Field birth date cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_EMAIL_FIELD = "Field email cannot be empty or null.";
-    public static final String NULL_OR_EMPTY_PASSWORD_FIELD = "Field password cannot be empty or null.";
+    public static final String NULL_OR_EMPTY_NAME_FIELD = "El campo nombre no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_LAST_NAME_FIELD = "El campo apellido no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_IDENTITY_DOCUMENT_FIELD = "El campo documento de identidad no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_PHONE_NUMBER_FIELD = "El campo número de teléfono no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_BIRTH_DATE_FIELD = "El campo fecha de nacimiento no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_EMAIL_FIELD = "El campo correo electrónico no puede estar vacío o nulo.";
+    public static final String NULL_OR_EMPTY_PASSWORD_FIELD = "El campo contraseña no puede estar vacío o nulo.";
 
 
 

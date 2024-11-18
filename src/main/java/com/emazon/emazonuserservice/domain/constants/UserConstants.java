@@ -5,8 +5,9 @@ public final class UserConstants {
         throw new IllegalStateException();
     }
 
-    public static final String USER_CREATED_SUCCESSFULLY = "User has been created successfully.";
-    public static final String USER_NOT_FOUND = "User whit %s not found";
-    public static final String USER_AUTHENTICATION_SUCCESSFULLY = "User has been authenticated successfully.";
+    public static final String USER_CREATED_SUCCESSFULLY = "El usuario ha sido creado exitosamente.";
+    public static final String USER_NOT_FOUND = "Usuario con %s no encontrado";
+    public static final String USER_AUTHENTICATION_SUCCESSFULLY = "El usuario ha sido autenticado exitosamente.";
     public static final Integer MIN_USER_AGE = 18;
+
 }
